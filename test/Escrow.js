@@ -6,35 +6,57 @@ const tokens = (n) => {
 }
 
 describe('Escrow', () => {
+    
+    let realEstate, escrow;
+    let buyer, seller, lender, inspector;
 
-    let buyer, seller, lender, inspector
-
-    it('Saves the addresses', async () => {
-
+    beforeEach(async () => {
         // Get the signers
         [buyer, seller, lender, inspector] = await ethers.getSigners();
 
-        // Deploy the contract
+        // Deploy the RealEstate contract
         const RealEstate =  await ethers.getContractFactory('RealEstate');
-        const realEstate = await RealEstate.deploy();
+        realEstate = await RealEstate.deploy();
 
         // Mint the property
         let transaction = await realEstate.connect(seller).mint("https://ipfs.io/ipfs/QmTudSYeM7mz3PkYEWXWqPjomRPHogcMFSq7XAvsvsgAPS");
         await transaction.wait();
 
+        // Deploy the escrow contract
         const Escrow = await ethers.getContractFactory('Escrow');
-        const escrow = await Escrow.deploy(
+        escrow = await Escrow.deploy(
             realEstate.address,
             seller.address,
             inspector.address,
             lender.address
         );
+    })
 
-        let result = await escrow.nftAddress();
+    describe('Deployments', () => {
+        it('Should return the NFT Address', async () => {
 
-        expect(result).to.be.equal(realEstate.address);
+            let result = await escrow.nftAddress();
 
-        result = await escrow.seller();
-        expect(result).to.be.equal(seller.address);
+            expect(result).to.be.equal(realEstate.address);
+        });
+    
+        it('Should returns the seller', async () => {
+            let result = await escrow.seller();
+            expect(result).to.be.equal(seller.address);
+    
+        });
+    
+        it('Should returns the lender', async () => {
+    
+        });
+    
+        it('Should returns the inspector', async () => {
+    
+        });
+    })
+
+    it('Saves the addresses', async () => {
+
+
     });
 })
