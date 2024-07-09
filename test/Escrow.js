@@ -30,6 +30,15 @@ describe('Escrow', () => {
             inspector.address,
             lender.address
         );
+
+        // Approve the escrow contract to transfer the property
+        transaction = await realEstate.connect(seller).approve(escrow.address, 1);
+        await transaction.wait();
+
+        // List the property
+        transaction = await escrow.connect(seller).listNFT(1)
+        await transaction.wait();
+
     })
 
     describe('Deployments', () => {
@@ -58,7 +67,6 @@ describe('Escrow', () => {
     })
 
     it('Saves the addresses', async () => {
-
 
     });
 
