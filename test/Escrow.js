@@ -61,4 +61,10 @@ describe('Escrow', () => {
 
 
     });
+
+    describe('Listing', () => {
+        it('Should update the status of the property ownership', async () => {
+            expect(await realEstate.ownerOf(1)).to.be.equal(escrow.address);
+        });
+    })
 })
