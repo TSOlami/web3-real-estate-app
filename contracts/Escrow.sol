@@ -27,4 +27,7 @@ contract Escrow {
         nftAddress = _nftAddress;
     }
 
+    function listNFT(uint256 _tokenId) public {
+        IERC721(nftAddress).transferFrom(msg.sender, address(this), _tokenId);
+    }
 }
