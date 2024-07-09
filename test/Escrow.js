@@ -47,11 +47,13 @@ describe('Escrow', () => {
         });
     
         it('Should returns the lender', async () => {
-    
+            let result = await escrow.lender();
+            expect(result).to.be.equal(lender.address);
         });
     
         it('Should returns the inspector', async () => {
-    
+            let result = await escrow.inspector();
+            expect(result).to.be.equal(inspector.address);
         });
     })
 
