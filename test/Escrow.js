@@ -36,7 +36,7 @@ describe('Escrow', () => {
         await transaction.wait();
 
         // List the property
-        transaction = await escrow.connect(seller).listNFT(1)
+        transaction = await escrow.connect(seller).listNFT(1, tokens(100), tokens(50), buyer.address);
         await transaction.wait();
 
     })
@@ -49,18 +49,18 @@ describe('Escrow', () => {
             expect(result).to.be.equal(realEstate.address);
         });
     
-        it('Should returns the seller', async () => {
+        it('Should return the seller', async () => {
             let result = await escrow.seller();
             expect(result).to.be.equal(seller.address);
     
         });
     
-        it('Should returns the lender', async () => {
+        it('Should return the lender', async () => {
             let result = await escrow.lender();
             expect(result).to.be.equal(lender.address);
         });
     
-        it('Should returns the inspector', async () => {
+        it('Should return the inspector', async () => {
             let result = await escrow.inspector();
             expect(result).to.be.equal(inspector.address);
         });
@@ -78,6 +78,26 @@ describe('Escrow', () => {
         it('Should update the status of the property listing', async () => {
             const result = await escrow.isListed(1);
             expect(result).to.be.equal(true);
+        });
+
+        it('Should return the purchase price of the property', async () => {
+            const result = await escrow.purchasePrice(1);
+            expect(result).to.be.equal(tokens(100));
+        });
+        
+        it('Should return the buyer of the property', async () => {
+            const result = await escrow.buyer(1);
+            expect(result).to.be.equal(buyer.address);
+        });
+
+        it('Should return the escrow amount of the property', async () => {
+            const result = await escrow.escrowAmount(1);
+            expect(result).to.be.equal(tokens(50));
+        });
+
+        it('Check if only the seller can list the property', async () => {
+            const result = escrow.connect(buyer).listNFT(1, tokens(100), tokens(50), buyer.address);
+            await expect(result).to.be.revertedWith('Only the seller can call this function');
         });
     })
 })
