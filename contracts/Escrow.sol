@@ -15,6 +15,8 @@ contract Escrow {
     address public lender;
     address payable public seller;
 
+    mapping(uint256 => bool) public isListed;
+
     constructor(
         address _nftAddress,
         address payable _seller,
@@ -28,6 +30,10 @@ contract Escrow {
     }
 
     function listNFT(uint256 _tokenId) public {
+        // Transfer NFT to this contract
         IERC721(nftAddress).transferFrom(msg.sender, address(this), _tokenId);
+
+        // Mark NFT as listed
+        isListed[_tokenId] = true;
     }
 }
